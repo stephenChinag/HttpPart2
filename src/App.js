@@ -2,16 +2,19 @@ import React,  {Fragment, useState}from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
+import Spin from './components/spinner/Spin';
 
 function App() {
 
   const [movie , setMovies]= useState([])
- 
-const fetchApiHandler=()=>{
-  fetch("https://swapi.dev/api/films").then(respone=>{
-    return respone.json()
+  const [isLoading, setIsLoading] = useState(false)
 
-  }).then((data)=>{
+
+async function fetchApiHandler(){
+  setIsLoading(true)
+ const response= await fetch("https://swapi.dev/api/films")
+    const data= await response.json()
+
     const transData= data.results.map(mmovie=>{
       return {
         id : mmovie.episode_id,
@@ -23,9 +26,9 @@ const fetchApiHandler=()=>{
 
     })
     setMovies(transData)
-  })
-}
+    setIsLoading(false)
 
+  }
  
 
 
@@ -35,7 +38,9 @@ const fetchApiHandler=()=>{
         <button onClick={fetchApiHandler} >Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movie} />
+       {!isLoading && <MoviesList movies={movie} />}
+       {isLoading && <div><Spin/></div>}
+     
       </section>
     </Fragment>
   );      
