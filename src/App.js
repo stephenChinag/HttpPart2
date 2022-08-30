@@ -5,34 +5,37 @@ import './App.css';
 
 function App() {
 
+  const [movie , setMovies]= useState([])
+ 
+const fetchApiHandler=()=>{
+  fetch("https://swapi.dev/api/films").then(respone=>{
+    return respone.json()
 
-  const[movies ,setMovies]=useState([])
+  }).then((data)=>{
+    const transData= data.results.map(mmovie=>{
+      return {
+        id : mmovie.episode_id,
+        title:mmovie.title,
+        openingText:mmovie.opening_crawl,
+        releaseDate: mmovie.release_date
 
+      }
 
-  function fetchAPIHandler () {
-  fetch("https://swapi.dev/api/films").then(response=>{
-   return response.json()}).then(data=>{
-
-    const transFormoMovies= data.results.map(transMovie => {
-     return { 
-      id:transMovie.episode_id,
-      title : transMovie.title,
-      openingText: transMovie.opening_crawl,
-      releaseDate: transMovie.release_date
-    }
     })
-    setMovies(transFormoMovies);
-   })
-  }
+    setMovies(transData)
+  })
+}
+
+ 
 
 
   return (
     <Fragment>
       <section>
-        <button onClick={fetchAPIHandler}>Fetch Movies</button>
+        <button onClick={fetchApiHandler} >Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+        <MoviesList movies={movie} />
       </section>
     </Fragment>
   );      

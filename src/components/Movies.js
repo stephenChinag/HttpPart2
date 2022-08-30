@@ -12,4 +12,4 @@ const Movies=(props)=>{
         </li>
     )
 }
-export default Movies;
+export default Movies; 
