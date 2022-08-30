@@ -9,7 +9,6 @@ const Movies=(props)=>{
             <p>{props.openingText}</p>
             <h3>{props.releaseDate}</h3>
            
-
         </li>
     )
 }
