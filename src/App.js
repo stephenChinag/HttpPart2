@@ -1,4 +1,4 @@
-import React,  {Fragment, useState}from 'react';
+import React,  {Fragment, useEffect, useState}from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -8,13 +8,29 @@ function App() {
 
   const [movie , setMovies]= useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [error ,setError]= useState(null)
 
+  useEffect( ()=>{
+    fetchApiHandler()
+  }, []
+  )
+
+  
 
 async function fetchApiHandler(){
   setIsLoading(true)
- const response= await fetch("https://swapi.dev/api/films")
+  setError(null)
+  try{
+
+    const response= await fetch("https://swapi.dev/api/films")
+    if (!response.ok){
+      throw new Error("something went wrong")
+    }
+
+    
     const data= await response.json()
 
+   
     const transData= data.results.map(mmovie=>{
       return {
         id : mmovie.episode_id,
@@ -26,10 +42,25 @@ async function fetchApiHandler(){
 
     })
     setMovies(transData)
-    setIsLoading(false)
+   
 
+  } catch(error){
+    setError(error.message)
+  }
+  setIsLoading(false)
   }
  
+
+  let content = <p> found no movies </p>
+  if (movie.length>0){
+    content= <MoviesList movies={movie} />
+  }
+  if (error){
+    content =<p>console.error();</p>
+  }
+  if (isLoading){
+    content=<Spin/>
+  }
 
 
   return (
@@ -37,12 +68,7 @@ async function fetchApiHandler(){
       <section>
         <button onClick={fetchApiHandler} >Fetch Movies</button>
       </section>
-      <section>
-       {!isLoading && movie.length>0 && <MoviesList movies={movie} />}
-       
-       {isLoading && <Spin/>}
-     
-      </section>
+      <section> {content}</section>
     </Fragment>
   );      
 }
