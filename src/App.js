@@ -38,8 +38,9 @@ async function fetchApiHandler(){
         <button onClick={fetchApiHandler} >Fetch Movies</button>
       </section>
       <section>
-       {!isLoading && <MoviesList movies={movie} />}
-       {isLoading && <div><Spin/></div>}
+       {!isLoading && movie.length>0 && <MoviesList movies={movie} />}
+       
+       {isLoading && <Spin/>}
      
       </section>
     </Fragment>
