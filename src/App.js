@@ -46,7 +46,7 @@ const fetchApiHandler= useCallback( async () => {
 
   useEffect( ()=>{
     fetchApiHandler()
-  }, [fetchApiHandler] )
+  }, [fetchApiHandler] ) 
 
  
 
