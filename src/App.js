@@ -1,4 +1,4 @@
-import React,  {Fragment, useEffect, useState}from 'react';
+import React,  {Fragment, useCallback, useEffect, useState}from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -10,14 +10,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error ,setError]= useState(null)
 
-  useEffect( ()=>{
-    fetchApiHandler()
-  }, []
-  )
 
-  
-
-async function fetchApiHandler(){
+const fetchApiHandler= useCallback( async () => { 
   setIsLoading(true)
   setError(null)
   try{
@@ -48,7 +42,12 @@ async function fetchApiHandler(){
     setError(error.message)
   }
   setIsLoading(false)
-  }
+  } , [])
+
+  useEffect( ()=>{
+    fetchApiHandler()
+  }, [fetchApiHandler] )
+
  
 
   let content = <p> found no movies </p>
@@ -56,7 +55,7 @@ async function fetchApiHandler(){
     content= <MoviesList movies={movie} />
   }
   if (error){
-    content =<p>console.error();</p>
+    content =<p>Something went wrong</p>
   }
   if (isLoading){
     content=<Spin/>
